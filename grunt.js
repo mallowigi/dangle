@@ -3,7 +3,7 @@
 module.exports = function (grunt) {
 
   grunt.initConfig({
-    pkg: '<json:package.json>',
+    pkg: '<json:bower.json>',
     meta: {
       banner: '/*! <%= pkg.name %> - v<%= pkg.version %> - ' +
         '<%= grunt.template.today("yyyy-mm-dd") %>\n' +
