@@ -92,7 +92,8 @@ angular.module('dangle.donut', [])
         var svg = d3.select(element[0])
           .append('svg')
           .attr('preserveAspectRatio', 'xMinYMin meet')
-          .attr('viewBox', '0 0 ' + w + ' ' + h);
+          .attr('viewBox', '0 0 ' + w + ' ' + h)
+          .class('class', 'fs-donut');
 
         // group for arcs
         var arcs = svg.append('g')
@@ -167,6 +168,7 @@ angular.module('dangle.donut', [])
                 .attr('stroke', '#fff')
                 .attr('stroke-width', '1.5')
                 .attr('cursor', 'pointer')
+                .attr('class','fs-arc')
                 .style('fill', function (d) { return color(d.data.term); })
                 .each(function (d) { this._current = d; })
                 .on('mousedown', function (d) {
