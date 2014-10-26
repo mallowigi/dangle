@@ -1,15 +1,15 @@
 {
-    "name": "dangle",
+    "name": "dangle.donut",
     "description": "A set of AngularJS directives that provide common visualizations for elasticsearch based on D3",
-    "version": "1.0.0",
+    "version": "1.0.1",
     "homepage": "http://www.fullscale.co/dangle",
     "keywords": ["angularjs", "d3", "charts", "graphs", "elasticsearch"],
     "repository": {
         "type": "git",
-        "url": "git://github.com/fullscale/dangle.git"
+        "url": "https://github.com/mallowigi/dangle.donut.git"
     },
     "bugs": {
-        "url": "https://github.com/fullscale/dangle/issues"
+        "url": "https://github.com/mallowigi/dangle.donut/issues"
     },
     "licenses": [
         {
