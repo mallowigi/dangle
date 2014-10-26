@@ -24,7 +24,7 @@
  */
 /* global angular, d3 */
 angular.module('dangle.donut', [])
-  .directive('fsDonut', [function () {
+  .directive('fsDonut', ['$rootScope', function ($rootScope) {
     'use strict';
 
     return {
@@ -168,7 +168,7 @@ angular.module('dangle.donut', [])
                 .attr('stroke', '#fff')
                 .attr('stroke-width', '1.5')
                 .attr('cursor', 'pointer')
-                .attr('class','fs-arc')
+                .attr('class', function(d){ return 'fs-arc fs-arc-' + d.data.term; })
                 .style('fill', function (d) { return color(d.data.term); })
                 .each(function (d) { this._current = d; })
                 .on('mousedown', function (d) {
@@ -337,6 +337,18 @@ angular.module('dangle.donut', [])
             }
 
           }
+        });
+
+        // When hovering a label, we send an enter event
+        $rootScope.$on('donut:highlight:enter', function (event, type) {
+          // Highlight the donut section related to the label
+          element.find('.fs-arc').css({opacity: 0.5});
+          element.find('.fs-arc-' + type.toLowerCase()).css({opacity: 1.0});
+        });
+
+        // When exiting a label, we send a leave event
+        $rootScope.$on('donut:highlight:leave', function (event, type) {
+          element.find('.fs-arc').css({opacity: 1.0});
         });
 
       }
