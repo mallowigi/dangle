@@ -110,14 +110,12 @@ angular.module('dangle.donut', [])
         // Wrap the main drawing logic in an Angular watch function.
         // This will get called whenever our data attribute changes.
         scope.$watch('bind', function (data) {
-          var self = this;
-
           var duration = scope.duration || 0;
 
           // arc tweening
           function arcTween(d, i) {
-            var i = d3.interpolate(self._current, d);
-            self._current = i(0);
+            var i = d3.interpolate(this._current, d);
+            this._current = i(0);
             return function (t) {
               return arc(i(t));
             };
@@ -125,7 +123,7 @@ angular.module('dangle.donut', [])
 
           // label tweening
           function textTween(d, i) {
-            var a = (self._current.startAngle + self._current.endAngle - Math.PI) / 2;
+            var a = (this._current.startAngle + this._current.endAngle - Math.PI) / 2;
             var b = (d.startAngle + d.endAngle - Math.PI) / 2;
 
             var fn = d3.interpolateNumber(a, b);
