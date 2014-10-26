@@ -168,7 +168,7 @@ angular.module('dangle.donut', [])
                 .attr('stroke', '#fff')
                 .attr('stroke-width', '1.5')
                 .attr('cursor', 'pointer')
-                .attr('class', function(d){ return 'fs-arc fs-arc-' + d.data.term; })
+                .attr('class', function (d) { return 'fs-arc fs-arc-' + d.data.term.toLowerCase(); })
                 .style('fill', function (d) { return color(d.data.term); })
                 .each(function (d) { this._current = d; })
                 .on('mousedown', function (d) {

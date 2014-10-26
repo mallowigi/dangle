@@ -1,4 +1,4 @@
-/*! dangle-donut - v1.0.4 - 2014-10-26
+/*! dangle-donut - v1.0.5 - 2014-10-26
 * https://github.com/mallowigi/dangle.donut
 * Copyright (c) 2014 FullScale Labs, LLC; Licensed  */
 
@@ -172,7 +172,7 @@ angular.module('dangle.donut', [])
                 .attr('stroke', '#fff')
                 .attr('stroke-width', '1.5')
                 .attr('cursor', 'pointer')
-                .attr('class', function(d){ return 'fs-arc fs-arc-' + d.data.term; })
+                .attr('class', function (d) { return 'fs-arc fs-arc-' + d.data.term.toLowerCase(); })
                 .style('fill', function (d) { return color(d.data.term); })
                 .each(function (d) { this._current = d; })
                 .on('mousedown', function (d) {
