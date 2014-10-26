@@ -20,5 +20,9 @@
   "main": "dist/dangle.donut.js",
   "dependencies": {
     "d3": "~3.4.13"
+  },
+  "author": {
+    "name": "FullScale Labs, LLC",
+    "url": "https://github.com/fullscale/dangle/blob/master/AUTHORS"
   }
 }

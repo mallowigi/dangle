@@ -1,6 +1,6 @@
-/*! dangle.donut - v1.0.1 - 2014-10-26
-* http://www.fullscale.co/dangle
-* Copyright (c) 2014 FullScale Labs, LLC; Licensed MIT */
+/*! dangle-donut - v1.0.3 - 2014-10-26
+* https://github.com/mallowigi/dangle.donut
+* Copyright (c) 2014 FullScale Labs, LLC; Licensed  */
 
 /* 
  * Copyright (c) 2012 FullScale Labs, LLC
@@ -115,7 +115,7 @@ angular.module('dangle.donut', [])
           var duration = scope.duration || 0;
 
           // arc tweening
-          function arcTween(d) {
+          function arcTween(d, i) {
             var i = d3.interpolate(self._current, d);
             self._current = i(0);
             return function (t) {

@@ -111,7 +111,7 @@ angular.module('dangle.donut', [])
           var duration = scope.duration || 0;
 
           // arc tweening
-          function arcTween(d) {
+          function arcTween(d, i) {
             var i = d3.interpolate(self._current, d);
             self._current = i(0);
             return function (t) {
