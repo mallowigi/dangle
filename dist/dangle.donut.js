@@ -1,4 +1,4 @@
-/*! dangle - v1.0.0 - 2014-10-26
+/*! dangle.donut - v1.0.1 - 2014-10-26
 * http://www.fullscale.co/dangle
 * Copyright (c) 2014 FullScale Labs, LLC; Licensed MIT */
 
@@ -26,7 +26,7 @@
  * FROM, OUT OF OR IN CONNECTION WITH THE SOFTWARE OR THE USE OR
  * OTHER DEALINGS IN THE SOFTWARE.
  */
-
+/* global angular, d3 */
 angular.module('dangle.donut', [])
   .directive('fsDonut', [function () {
     'use strict';
@@ -55,11 +55,11 @@ angular.module('dangle.donut', [])
         var innerRadius = scope.innerRadius || 0;
         var fontSize = scope.fontSize || 14;
         var fontColor = attrs.fontColor || "#fff";
-        var color = undefined;
-        var showLabels = scope.showLabels || true;
+        var color;
+        var showLabels = scope.showLabels === "true";
 
         // if no field param is set, use the facet name but normalize the case
-        if (attrs.field == undefined) {
+        if (angular.isUndefined(attrs.field)) {
           attrs.field = attrs.bind.split('.').pop().toLowerCase();
         }
 
@@ -75,7 +75,7 @@ angular.module('dangle.donut', [])
         else {
           color = function (term) {
             return scope.colorMap[term];
-          }
+          };
         }
 
         // width/height (based on giveb radius)
@@ -110,13 +110,14 @@ angular.module('dangle.donut', [])
         // Wrap the main drawing logic in an Angular watch function.
         // This will get called whenever our data attribute changes.
         scope.$watch('bind', function (data) {
+          var self = this;
 
           var duration = scope.duration || 0;
 
           // arc tweening
-          function arcTween(d, i) {
-            var i = d3.interpolate(this._current, d);
-            this._current = i(0);
+          function arcTween(d) {
+            var i = d3.interpolate(self._current, d);
+            self._current = i(0);
             return function (t) {
               return arc(i(t));
             };
@@ -124,7 +125,7 @@ angular.module('dangle.donut', [])
 
           // label tweening
           function textTween(d, i) {
-            var a = (this._current.startAngle + this._current.endAngle - Math.PI) / 2;
+            var a = (self._current.startAngle + self._current.endAngle - Math.PI) / 2;
             var b = (d.startAngle + d.endAngle - Math.PI) / 2;
 
             var fn = d3.interpolateNumber(a, b);
@@ -191,7 +192,7 @@ angular.module('dangle.donut', [])
               // remove arcs not in the dataset
               path.exit().remove();
 
-              if (scope.showLabels) {
+              if (showLabels) {
                 // update the label ticks
                 var ticks = labels.selectAll('line').data(pieData);
                 ticks.enter().append('line')
@@ -205,19 +206,16 @@ angular.module('dangle.donut', [])
                     return 'rotate(' + (d.startAngle + d.endAngle) / 2 * (180 / Math.PI) + ')'; // radians to degrees
                   })
                   .each(function (d) {this._current = d;});
-              }
 
-              // run the transition
-              ticks.transition()
-                .duration(duration)
-                .attr("transform", function (d) {
-                  return "rotate(" + (d.startAngle + d.endAngle) / 2 * (180 / Math.PI) + ")";
-                });
+                // run the transition
+                ticks.transition()
+                  .duration(duration)
+                  .attr("transform", function (d) {
+                    return "rotate(" + (d.startAngle + d.endAngle) / 2 * (180 / Math.PI) + ")";
+                  });
 
-              // flush old entries
-              ticks.exit().remove();
-
-              if (scope.showLabels) {
+                // flush old entries
+                ticks.exit().remove();
 
                 // update the percent labels
                 var percentLabels = labels.selectAll("text.value").data(pieData)
@@ -343,7 +341,7 @@ angular.module('dangle.donut', [])
             }
 
           }
-        })
+        });
 
       }
     };
