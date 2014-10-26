@@ -1,4 +1,4 @@
-/*! dangle-donut - v1.0.3 - 2014-10-26
+/*! dangle-donut - v1.0.4 - 2014-10-26
 * https://github.com/mallowigi/dangle.donut
 * Copyright (c) 2014 FullScale Labs, LLC; Licensed  */
 
@@ -97,7 +97,7 @@ angular.module('dangle.donut', [])
           .append('svg')
           .attr('preserveAspectRatio', 'xMinYMin meet')
           .attr('viewBox', '0 0 ' + w + ' ' + h)
-          .class('class', 'fs-donut');
+          .attr('class', 'fs-donut');
 
         // group for arcs
         var arcs = svg.append('g')

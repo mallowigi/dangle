@@ -93,7 +93,7 @@ angular.module('dangle.donut', [])
           .append('svg')
           .attr('preserveAspectRatio', 'xMinYMin meet')
           .attr('viewBox', '0 0 ' + w + ' ' + h)
-          .class('class', 'fs-donut');
+          .attr('class', 'fs-donut');
 
         // group for arcs
         var arcs = svg.append('g')
