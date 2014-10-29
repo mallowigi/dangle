@@ -1,4 +1,4 @@
-/*! dangle-donut - v1.0.5 - 2014-10-26
+/*! dangle-donut - v1.0.51 - 2014-10-29
 * https://github.com/mallowigi/dangle.donut
 * Copyright (c) 2014 FullScale Labs, LLC; Licensed  */
 
@@ -45,7 +45,8 @@ angular.module('dangle.donut', [])
         onClick: '=',
         bind: '=',
         duration: '@',
-        showLabels: '@'
+        showLabels: '@',
+        opacity: '@'
       },
 
       link: function (scope, element, attrs) {
@@ -57,6 +58,7 @@ angular.module('dangle.donut', [])
         var fontColor = attrs.fontColor || "#fff";
         var color;
         var showLabels = scope.showLabels === "true";
+        var opacity = scope.opacity || 0.5;
 
         // if no field param is set, use the facet name but normalize the case
         if (angular.isUndefined(attrs.field)) {
@@ -175,6 +177,14 @@ angular.module('dangle.donut', [])
                 .attr('class', function (d) { return 'fs-arc fs-arc-' + d.data.term.toLowerCase(); })
                 .style('fill', function (d) { return color(d.data.term); })
                 .each(function (d) { this._current = d; })
+                .on('mouseenter', function(d) {
+                  // Highlight the donut section related to the label
+                  element.find('.fs-arc').css({opacity: opacity});
+                  element.find('.fs-arc-' + d.data.term.toLowerCase()).css({opacity: 1.0});
+                })
+                .on('mouseleave', function(d) {
+                  element.find('.fs-arc').css({opacity: 1.0});
+                })
                 .on('mousedown', function (d) {
                   scope.$apply(function () {
                     (scope.onClick || angular.noop)(attrs.field, d.data.term);
@@ -346,7 +356,7 @@ angular.module('dangle.donut', [])
         // When hovering a label, we send an enter event
         $rootScope.$on('donut:highlight:enter', function (event, type) {
           // Highlight the donut section related to the label
-          element.find('.fs-arc').css({opacity: 0.5});
+          element.find('.fs-arc').css({opacity: opacity});
           element.find('.fs-arc-' + type.toLowerCase()).css({opacity: 1.0});
         });
 
