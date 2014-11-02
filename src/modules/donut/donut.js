@@ -28,6 +28,7 @@ angular.module('dangle.donut', [])
     'use strict';
     return {
       isHighlighted: false,
+      highlightedTerm: '',
       hoveredTerm: ''
     };
   })
@@ -186,18 +187,24 @@ angular.module('dangle.donut', [])
                 .style('fill', function (d) { return color(d.data.term); })
                 .each(function (d) { this._current = d; })
                 .on('mouseenter', function (d) {
-                  // When hovering the arc, set other arcs to given opacity (only when not highlighted state)
-                  if (!fsDonutData.isHighlighted) {
-                    // Highlight the donut section related to the label
-                    element.find('.fs-arc').css({opacity: opacity});
-                    element.find('.fs-arc-' + d.data.term.toLowerCase()).css({opacity: 1.0});
-                  }
+                  // Highlight the donut section related to the label
+                  element.find('.fs-arc').css({opacity: opacity});
+                  element.find('.fs-arc-' + d.data.term.toLowerCase()).css({opacity: 1.0});
+
+                  // Set the new hovered term
+                  fsDonutData.hoveredTerm = d.data.term;
                 })
                 .on('mouseleave', function (d) {
                   // When leaving the arc, reset arc opacity (only when not hl)
                   if (!fsDonutData.isHighlighted) {
                     element.find('.fs-arc').css({opacity: 1.0});
+                  } else {
+                    element.find('.fs-arc').css({opacity: opacity});
+                    element.find('.fs-arc-' + fsDonutData.highlightedTerm.toLowerCase()).css({opacity: 1.0});
                   }
+
+                  // Reset the hovered term
+                  fsDonutData.hoveredTerm = '';
                 })
                 .on('mousedown', function (d) {
                   // When clicking the arc, set isHighlighted
@@ -384,6 +391,18 @@ angular.module('dangle.donut', [])
               element.find('.fs-arc').css({opacity: opacity});
               element.find('.fs-arc-' + newTerm.toLowerCase()).css({opacity: 1.0});
             }
+          }
+        });
+
+        scope.$watch('donutData.highlightedTerm', function (newTerm, oldTerm) {
+          if (!fsDonutData.isHighlighted) {
+            return;
+          }
+
+          // Change highlighted term
+          if (newTerm !== oldTerm) {
+            element.find('.fs-arc').css({opacity: opacity});
+            element.find('.fs-arc-' + newTerm.toLowerCase()).css({opacity: 1.0});
           }
         });
       }
