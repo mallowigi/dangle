@@ -1,4 +1,4 @@
-/*! dangle-donut - v1.0.51 - 2014-10-29
+/*! dangle-donut - v1.0.6 - 2014-11-02
 * https://github.com/mallowigi/dangle.donut
 * Copyright (c) 2014 FullScale Labs, LLC; Licensed  */
 
@@ -28,7 +28,15 @@
  */
 /* global angular, d3 */
 angular.module('dangle.donut', [])
-  .directive('fsDonut', ['$rootScope', function ($rootScope) {
+  .factory('fsDonutData', function () {
+    'use strict';
+    return {
+      isHighlighted: false,
+      hoveredTerm: ''
+    };
+  })
+
+  .directive('fsDonut', ['fsDonutData', function (fsDonutData) {
     'use strict';
 
     return {
@@ -48,6 +56,10 @@ angular.module('dangle.donut', [])
         showLabels: '@',
         opacity: '@'
       },
+
+      controller: ['$scope', function ($scope) {
+        $scope.donutData = fsDonutData;
+      }],
 
       link: function (scope, element, attrs) {
 
@@ -177,15 +189,22 @@ angular.module('dangle.donut', [])
                 .attr('class', function (d) { return 'fs-arc fs-arc-' + d.data.term.toLowerCase(); })
                 .style('fill', function (d) { return color(d.data.term); })
                 .each(function (d) { this._current = d; })
-                .on('mouseenter', function(d) {
-                  // Highlight the donut section related to the label
-                  element.find('.fs-arc').css({opacity: opacity});
-                  element.find('.fs-arc-' + d.data.term.toLowerCase()).css({opacity: 1.0});
+                .on('mouseenter', function (d) {
+                  // When hovering the arc, set other arcs to given opacity (only when not highlighted state)
+                  if (!fsDonutData.isHighlighted) {
+                    // Highlight the donut section related to the label
+                    element.find('.fs-arc').css({opacity: opacity});
+                    element.find('.fs-arc-' + d.data.term.toLowerCase()).css({opacity: 1.0});
+                  }
                 })
-                .on('mouseleave', function(d) {
-                  element.find('.fs-arc').css({opacity: 1.0});
+                .on('mouseleave', function (d) {
+                  // When leaving the arc, reset arc opacity (only when not hl)
+                  if (!fsDonutData.isHighlighted) {
+                    element.find('.fs-arc').css({opacity: 1.0});
+                  }
                 })
                 .on('mousedown', function (d) {
+                  // When clicking the arc, set isHighlighted
                   scope.$apply(function () {
                     (scope.onClick || angular.noop)(attrs.field, d.data.term);
                   });
@@ -353,18 +372,25 @@ angular.module('dangle.donut', [])
           }
         });
 
-        // When hovering a label, we send an enter event
-        $rootScope.$on('donut:highlight:enter', function (event, type) {
-          // Highlight the donut section related to the label
-          element.find('.fs-arc').css({opacity: opacity});
-          element.find('.fs-arc-' + type.toLowerCase()).css({opacity: 1.0});
-        });
+        // When hovered term changes, set other arcs to given opacity (only if donut is not already highlighted)
+        scope.$watch('donutData.hoveredTerm', function (newTerm, oldTerm) {
+          if (fsDonutData.isHighlighted) {
+            return;
+          }
 
-        // When exiting a label, we send a leave event
-        $rootScope.$on('donut:highlight:leave', function (event, type) {
-          element.find('.fs-arc').css({opacity: 1.0});
+          if (newTerm !== oldTerm) {
+            // Empty
+            if (!newTerm) {
+              element.find('.fs-arc').css({opacity: 1.0});
+            }
+            else {
+              // Highlight the donut section related to the label
+              element.find('.fs-arc').css({opacity: opacity});
+              element.find('.fs-arc-' + newTerm.toLowerCase()).css({opacity: 1.0});
+            }
+          }
         });
-
       }
     };
-  }]);
+  }]
+);
