@@ -1,4 +1,4 @@
-/*! dangle-donut - v1.0.7 - 2014-11-02
+/*! dangle-donut - v1.0.9 - 2014-11-03
 * https://github.com/mallowigi/dangle.donut
 * Copyright (c) 2014 FullScale Labs, LLC; Licensed  */
 
@@ -202,7 +202,8 @@ angular.module('dangle.donut', [])
                   // When leaving the arc, reset arc opacity (only when not hl)
                   if (!fsDonutData.isHighlighted) {
                     element.find('.fs-arc').css({opacity: 1.0});
-                  } else {
+                  }
+                  else {
                     element.find('.fs-arc').css({opacity: opacity});
                     element.find('.fs-arc-' + fsDonutData.highlightedTerm.toLowerCase()).css({opacity: 1.0});
                   }
@@ -407,6 +408,12 @@ angular.module('dangle.donut', [])
           if (newTerm !== oldTerm) {
             element.find('.fs-arc').css({opacity: opacity});
             element.find('.fs-arc-' + newTerm.toLowerCase()).css({opacity: 1.0});
+          }
+        });
+
+        scope.$watch('donutData.isHighlighted', function (isHl) {
+          if (isHl === false) {
+            element.find('.fs-arc').css({opacity: 1.0});
           }
         });
       }
