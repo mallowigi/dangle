@@ -374,7 +374,7 @@ angular.module('dangle.donut', [])
             }
 
           }
-        });
+        }, true);
 
         // When hovered term changes, set other arcs to given opacity (only if donut is not already highlighted)
         scope.$watch('donutData.hoveredTerm', function (newTerm, oldTerm) {

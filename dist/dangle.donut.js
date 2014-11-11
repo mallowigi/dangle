@@ -1,4 +1,4 @@
-/*! dangle-donut - v1.0.9 - 2014-11-03
+/*! dangle-donut - v1.0.10 - 2014-11-11
 * https://github.com/mallowigi/dangle.donut
 * Copyright (c) 2014 FullScale Labs, LLC; Licensed  */
 
@@ -378,7 +378,7 @@ angular.module('dangle.donut', [])
             }
 
           }
-        });
+        }, true);
 
         // When hovered term changes, set other arcs to given opacity (only if donut is not already highlighted)
         scope.$watch('donutData.hoveredTerm', function (newTerm, oldTerm) {
